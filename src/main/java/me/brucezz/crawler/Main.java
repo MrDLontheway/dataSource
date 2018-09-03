@@ -17,7 +17,8 @@ public class Main {
     public static Properties kafkaPro = null;
     public static String TOPIC = "dy_danmu";
     public static String GIFTTOPIC = "dy_gift";
-    public static boolean TOKAFKA = false;
+    public static boolean DANMUTOKAFKA = false;
+    public static boolean GIFTTOKAFKA = false;
     /**
      * 3、通过配置文件，创建生产者
      */

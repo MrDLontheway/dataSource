@@ -83,7 +83,7 @@ public class CrawlerThread implements Runnable {
                     if (danmaku == null) continue;
 
                     danmakus.add(danmaku);
-                    if(Main.TOKAFKA){
+                    if(Main.DANMUTOKAFKA){
                         Main.producer.send(new KeyedMessage<String, String>(Main.TOPIC, danmaku.getRid() + "",JsonUtils.objectToJson(danmaku)));//"[date:" +danmaku.getDate()+"]"+ "[房间号:"+danmaku.getRid()+"]"+"["+danmaku.getContent()+"]")
                     }
                     LogUtil.i("Danmaku", danmaku.getSnick() + ":" + danmaku.getContent());
@@ -93,6 +93,7 @@ public class CrawlerThread implements Runnable {
                         danmakus.clear();
                     }
                 }else if(response.contains("spbc")||response.contains("rankup")||response.contains("dgb")){
+                    System.out.println(response);
                     HashMap map = ResponseParser.parseResponse(response);
                     MyHashMap myHashMap = new MyHashMap(map);
                     if(map.get("gfid")!=null&&Integer.parseInt((String) myHashMap.getOrElse("gfid",0))!=0){
@@ -107,14 +108,14 @@ public class CrawlerThread implements Runnable {
                         int sid = Integer.parseInt(myHashMap.getOrElse("sid",0).toString());
                         int giftType = 0;
                         if(response.contains("spbc"))
-                            giftType = 3;
+                            giftType = 1;
                         else if(response.contains("rankup"))
                             giftType = 2;
                         else if(response.contains("dgb"))
-                            giftType = 1;
+                            giftType = 3;
                         DyGift gift = new DyGift(uid,gid,nickName,giftName,rid,bid,sid,giftType);
                         System.out.println(gift);
-                        if(Main.TOKAFKA){
+                        if(Main.GIFTTOKAFKA){
                             if(response.contains("spbc")&&threadId!=0){
                                 continue;
                             }
@@ -152,11 +153,11 @@ public class CrawlerThread implements Runnable {
 
         //检查是否在线
         boolean online = ResponseParser.parseOnline(pageHtml);
-        if (!online) {
-            LogUtil.w("该房间还没有直播！" + roomUrl);
-            onExit();
-            return;
-        }
+//        if (!online) {
+//            LogUtil.w("该房间还没有直播！" + roomUrl);
+//            onExit();
+//            return;
+//        }
 
         //获取服务器IP列表
         LogUtil.i("获取服务器列表 ...");

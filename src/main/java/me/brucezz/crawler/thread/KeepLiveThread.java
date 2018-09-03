@@ -18,7 +18,6 @@ public class KeepLiveThread implements Runnable {
         this.s = s;
     }
 
-    @Override
     public void run() {
 
         LogUtil.i("KeepLive", "心跳包线程启动 ...");
